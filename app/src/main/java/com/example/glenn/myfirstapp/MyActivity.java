@@ -20,24 +20,32 @@ public class MyActivity extends ActionBarActivity {
     Button b1,b2;
     public final static String EXTRA_MESSAGE = "com.example.glenn.myfirstapp.MESSAGE";
     public final static String MyPREFERENCES = "MyPrefs";
+    public final static String BUTTON_NUMBER = "com.example.glenn.myfirstapp.BUTTON_NUMBER";
     public static final String buttonName = "nameKey";
     SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Load the preferences (shared variables) and set them
+        prefs = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        // See if we need to put in the default values into prefs
+        String button1_pref_value = prefs.getString("button1",null);
+        if (button1_pref_value == null) {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("button1", "Send Prefs B1");
+            editor.putString("button2", "Send Prefs B2");
+            editor.commit();
+        }
+
         setContentView(R.layout.activity_my);
         // Components in the application
         ed1 = (EditText) findViewById(R.id.edit_message);
         ed2 = (EditText) findViewById(R.id.edit_message2);
         b1 = (Button) findViewById(R.id.button);
         b2 = (Button) findViewById(R.id.button2);
-        // Load the preferences (shared variables) and set them
-        prefs = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("button1", "Send Prefs");
-        editor.putString("button2", "Send Prefs");
-        editor.commit();
+        b1.setText(prefs.getString("button1",""));
+        b2.setText(prefs.getString("button2",""));
 
 
         // Do SSH Stuff
@@ -65,18 +73,20 @@ public class MyActivity extends ActionBarActivity {
     }
 
     public void sendMessage(View view) {
-        // Do something in response to button
+        // Do something in response to button click
+        // Prepare DisplayMessageActivity
         Intent intent = new Intent(this, DisplayMessageActivity.class);
+        // Get the text that was sent
         EditText editText = (EditText) findViewById(R.id.edit_message);
         String message = editText.getText().toString();
         //editor.putString(this.getText().toString(), message);
         intent.putExtra(EXTRA_MESSAGE, message);
+        intent.putExtra(BUTTON_NUMBER, 1);
         startActivity(intent);
 
         //update the button text
         Button p1_button = (Button) findViewById(R.id.button);
         p1_button.setText(message);
-
     }
 
     public void sendMessage2(View view) {
@@ -85,7 +95,12 @@ public class MyActivity extends ActionBarActivity {
         EditText editText = (EditText) findViewById(R.id.edit_message2);
         String message = editText.getText().toString();
         intent.putExtra(EXTRA_MESSAGE, message);
+        intent.putExtra(BUTTON_NUMBER, 2);
         startActivity(intent);
+
+        //update the button text
+        Button p2_button = (Button) findViewById(R.id.button2);
+        p2_button.setText(message);
     }
 
     public void changeButton(View view) {

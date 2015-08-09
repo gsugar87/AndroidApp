@@ -20,21 +20,24 @@ public class DisplayMessageActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         String message = intent.getStringExtra(MyActivity.EXTRA_MESSAGE);
+        int button_num = intent.getIntExtra(MyActivity.BUTTON_NUMBER, 1);
 
         // Get a new string from the shared preferences
         prefs = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        String message1 = prefs.getString("button1", "");
         // put this string into the button text
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("button1", message);
+        if (button_num == 1){
+            editor.putString("button1", message);
+        }
+        else {
+            editor.putString("button2", message);
+        }
         editor.commit();
-
         // Create the text window
         TextView textView = new TextView(this);
         textView.setTextSize(40);
-        textView.setText(message1);
-
-        // Set the text view as the activity layour
+        textView.setText(message);
+        // Set the text view as the activity layout
         setContentView(textView);
     }
 
