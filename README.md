@@ -3,12 +3,19 @@
 This app eventually will be used for home automation.
 
 Desired Functionality:
+
 1. Connect to raspberry pi via ssh when launched.
+
 2. Read the current state of the system:
+
   a) Current Temperature
+
   b) Set Temperature Range
+
   c) Outlets on/off status
+
 3. Create buttons with correct labels (Turn On/Off)
+
 4. Display current temperature reading.
 
 How to implement:
